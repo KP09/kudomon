@@ -26,12 +26,15 @@ Player can indicate how far fwd/back and left/right they want to move
 
 ## Part 2
 Trainer gets a collection attribute (empty array)
-Trainers can only have 1 of each Kudomon
 If there are any Kudomon close to the Trainer they don't have, they get notified
 The Trainer can catch the Kudomon (add to collection)
 
 ## Part 3
-
+Instead of saving the actual Kudomon thats being caught:
+Just create a new Kudomon of the same type
+The new Kudomon gets the same attribute values as the old one
+Except position will be nil
+Then many Trainers can catch the same Kudomon without any issue
 
 ## Part 4
 Kudomon get HP and CP attributes

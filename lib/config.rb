@@ -1,8 +1,11 @@
 # Set the size of the grid (squared)
-GRID_SIZE = 20
+GRID_SIZE = 50
 
 # Set how many Kudomon to spawn inside the grid
 NUMBER_OF_KUDOMON = 25
+
+# Set the definition of 'nearby'
+NEARBY = 5
 
 # Set the Kudomon for the game
 KUDOMON = {

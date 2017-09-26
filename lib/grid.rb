@@ -2,8 +2,8 @@ class Grid
   attr_reader :trainer
 
   # Initializes a trainer and spawns Kudomon
-  def initialize
-    @trainer = Trainer.new(ask_for_name, random_position)
+  def initialize(trainer_name)
+    @trainer = Trainer.new(trainer_name, random_position)
     spawn_kudomon
   end
 
@@ -19,12 +19,6 @@ class Grid
   end
 
   private
-
-  # Asks a user for their name
-  def ask_for_name
-    puts "What's your name"
-    gets.chomp
-  end
 
   # Finds a random position within the grid
   def random_position
@@ -43,7 +37,10 @@ class Grid
     proposed_y_position = @trainer.position[:y] + desired_y_movement
     proposed_x_position = @trainer.position[:x] + desired_x_movement
 
-    if proposed_y_position > GRID_SIZE || proposed_x_position > GRID_SIZE
+    if proposed_y_position > GRID_SIZE \
+      || proposed_x_position > GRID_SIZE \
+      || proposed_y_position < 0 \
+      || proposed_x_position < 0
       puts "Sorry, that's beyond the grid"
       move_trainer
     else

@@ -1,4 +1,3 @@
-require_relative 'router'
 require_relative 'grid'
 require_relative 'config'
 require_relative 'position'
