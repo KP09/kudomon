@@ -5,7 +5,7 @@ GRID_SIZE = 50
 NUMBER_OF_KUDOMON = 25
 
 # Set the definition of 'nearby'
-NEARBY = 5
+NEARBY = 10
 
 # Set the Kudomon for the game
 KUDOMON = {

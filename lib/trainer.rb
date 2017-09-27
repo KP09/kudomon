@@ -1,56 +1,32 @@
 class Trainer < Position
   attr_reader :name
+  attr_accessor :collection
 
-  def initialize(name, position)
-    super(position)
+  def initialize(name, coordinates)
+    super(coordinates)
     @name = name
     @collection = []
   end
 
   # Shows the nearby Kudomon to the trainer and returns them in an array
   def nearby_kudomon
-    nearby_kudomon = []
-
-    uncaught_kudomon = ObjectSpace.each_object(Kudomon).to_a
-    uncaught_kudomon.reject! { |kudomon| kudomon.position == nil }
-
-    uncaught_kudomon.each do |kudomon|
-      nearby_kudomon << kudomon if kudomon.nearby?(self.position)
-    end
-
-    nearby_kudomon
+    Kudomon.uncaught.select { |kudomon| kudomon.nearby?(self.coordinates) }
   end
 
-  def catch_kudomon
-    puts "Which kudomon would you like to catch?"
-    species = gets.chomp
+  def move(y_shift, x_shift)
+    self.coordinates[:y] += y_shift
+    self.coordinates[:x] += x_shift
+  end
 
-    nearby_species = nearby_kudomon.map { |kudomon| kudomon.species }
-
-    if nearby_species.include?(species.capitalize)
-      catch = Kudomon.new(species, nil)
+  def catch(target_species)
+    catchable_kudomon = self.nearby_kudomon
+    nearby_species = catchable_kudomon.map { |kudomon| kudomon.species }
+    if nearby_species.include?(target_species.capitalize)
+      catch = Kudomon.new(target_species, nil)
       @collection << catch
-      puts "You've succesfully caught #{species.upcase}"
+      return true
     else
-      puts "Sorry, thats not a valid choice"
-    end
-  end
-
-  def show_squad
-    if @collection.any?
-      puts "Your Kudomon Squad:"
-      @collection.each do |kudomon|
-        puts "- #{kudomon.species.upcase} (#{kudomon.type})"
-      end
-    else
-      puts "You haven't caught any Kudomon yet"
-    end
-  end
-
-  private
-
-  def catch_valid?(kudomon)
-    if KUDOMON.include?(kudomon)
+      return false
     end
   end
 end
