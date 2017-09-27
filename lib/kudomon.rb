@@ -2,6 +2,8 @@ class Kudomon < Position
   attr_reader :species
   attr_reader :type
   attr_reader :position
+  attr_reader :cp
+  attr_accessor :hp
 
   @@instance_collector = []
 
@@ -9,18 +11,14 @@ class Kudomon < Position
     raise 'Undefined Kudomon' unless KUDOMON.include?(species.capitalize)
     super(position)
     @species = species.capitalize
-    @type = KUDOMON[species.capitalize]
+    @type = KUDOMON[@species][:type]
+    @hp = KUDOMON[@species][:hp]
+    @cp = KUDOMON[@species][:cp]
     @@instance_collector << self
   end
 
-  def self.uncaught
+  # Returns all Kudomon instances that are free
+  def self.free
     @@instance_collector.reject { |kudomon| kudomon.coordinates == nil }
-  end
-
-  def nearby?(coordinates)
-    x_delta = self.coordinates[:x] - coordinates[:x]
-    y_delta = self.coordinates[:y] - coordinates[:y]
-    distance = Math.sqrt((x_delta ** 2) + (y_delta ** 2))
-    distance <= NEARBY ? true : false
   end
 end

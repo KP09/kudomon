@@ -6,6 +6,15 @@ class Position
     @coordinates = coordinates
   end
 
+  # Returns true if a Position is nearby specified coordinates, false if not
+  # see 'config.rb' for NEARBY
+  def nearby?(coordinates)
+    x_delta = self.coordinates[:x] - coordinates[:x]
+    y_delta = self.coordinates[:y] - coordinates[:y]
+    distance = Math.sqrt((x_delta ** 2) + (y_delta ** 2))
+    distance <= NEARBY ? true : false
+  end
+
   private
 
   def validate_position(coordinates)

@@ -37,7 +37,8 @@ describe Trainer do
     let(:out_of_range_kudomon) { Kudomon.new('Kudoise', {x: too_far, y: too_far}) }
 
     it "allows a trainer to catch a nearby Kudomon" do
-      expect(trainer.catch('Sourbulb')).to eq true
+      in_range_kudomon = double('Sourbulb', coordinates = {x: nearby, y: nearby})
+
     end
   end
 end

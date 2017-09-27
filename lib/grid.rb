@@ -5,6 +5,7 @@ class Grid
   def initialize(trainer_name)
     @trainer = Trainer.new(trainer_name, random_position)
     spawn_kudomon
+    spawn_trainers
   end
 
   # Try to move the trainer and return true or false depending on success
@@ -27,6 +28,18 @@ class Grid
   def spawn_kudomon
     NUMBER_OF_KUDOMON.times do
       Kudomon.new(KUDOMON.keys.sample, random_position)
+    end
+  end
+
+  # Spawns computer Trainers in random positions
+  # Gives them all a random number of Kudomon
+  def spawn_trainers
+    COMPUTER_NAMES.each do |name|
+      new_trainer = Trainer.new(name, random_position)
+      rand(1..KUDOMON.length).times do
+        new_kudomon = Kudomon.new(KUDOMON.keys.sample, nil)
+        new_trainer.collection << new_kudomon
+      end
     end
   end
 
