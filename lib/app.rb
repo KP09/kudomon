@@ -3,13 +3,13 @@ require_relative 'index'
 
 class App
   def initialize
-    @grid = Grid.new("Kees")
+    @grid = Grid.new(ask("What's your name?"))
     @trainer = @grid.trainer
     @running = true
   end
 
   def run
-    message("Hello and Welcome to KUDOMON GO!")
+    message("Hello #{@trainer.name} and Welcome to KUDOMON GO!")
     while @running
       # Display the grid size and Trainer's position
       display_grid_size
@@ -35,7 +35,7 @@ class App
       action = get_trainer_action(catch_enabled, challenge_enabled)
       route(action, catch_enabled, challenge_enabled)
     end
-    message("Farewell")
+    message("Ciao for now #{@trainer.name}! Play again soon!")
   end
 
   private
@@ -55,7 +55,7 @@ class App
 
   def display_grid_size
     puts "\n"
-    puts "********************"
+    puts "*" * 20
     puts "The grid is #{GRID_SIZE} x #{GRID_SIZE}"
   end
 
@@ -66,7 +66,7 @@ class App
   end
 
   def show_catchable_kudomon(catchable_kudomon)
-    puts "--------------------"
+    puts "-" * 20
     if catchable_kudomon.any?
       puts "There are Kudomon nearby that you don't have yet!"
       catchable_kudomon.each do |kudomon|
@@ -80,7 +80,7 @@ class App
   end
 
   def show_challengeable_trainers(challengeable_trainers)
-    puts "--------------------"
+    puts "-" * 20
     if challengeable_trainers.any?
       puts "There are other Trainers nearby!"
       challengeable_trainers.each do |trainer|
@@ -220,8 +220,8 @@ class App
   def random_credit_message
     random_credit_score = rand(2)
     case random_credit_score
-      when 0 then "Eeeeshk, you probably shouldn't be taking a loan out right now"
-      when 1 then "Cool, you can afford a loan no problem"
+      when 0 then "Eeeeshk! You probably shouldn't be taking a loan out right now"
+      when 1 then "Good stuff! Looks like you can afford a loan no problem"
       when 2 then "Wowzer! You can splash the cash, you don't even need a loan!"
     end
   end

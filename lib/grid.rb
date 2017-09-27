@@ -3,7 +3,7 @@ class Grid
 
   # Initializes a trainer and spawns Kudomon
   def initialize(trainer_name)
-    @trainer = Trainer.new(trainer_name, random_position)
+    @trainer = Trainer.new(trainer_name.capitalize, random_position)
     spawn_kudomon
     spawn_trainers
   end

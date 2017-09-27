@@ -1,4 +1,10 @@
 class Battle
+  attr_reader :challenger
+  attr_reader :defender
+  attr_reader :challenger_kudomon
+  attr_reader :defender_kudomon
+  attr_reader :trainers
+
   def initialize(challenger, defender, chosen_kudomon)
     @challenger = challenger
     @defender = defender
@@ -13,6 +19,9 @@ class Battle
 
   def run
     battle_start_message
+
+    # Short pause for better user experience
+    sleep(3)
 
     until (@challenger_kudomon.hp <= 0) || (@defender_kudomon.hp <= 0)
       # Set which Trainer is attacking/defending
@@ -34,6 +43,9 @@ class Battle
 
     winning_pair = determine_winning_pair
     battle_end_message(winning_pair)
+
+    # Return the winning pair for testing
+    winning_pair
   end
 
   private
@@ -44,7 +56,7 @@ class Battle
     first_kudomon = set_kudomon(first_trainer)
     second_trainer = @trainers.last
     second_kudomon = set_kudomon(second_trainer)
-
+    print `clear`
     puts "LET THE BATTLE BEGIN!"
     puts "#{first_trainer.name}'s #{first_kudomon.species} (#{first_kudomon.type})"
     puts "---------- VS ----------"
@@ -65,7 +77,7 @@ class Battle
     elsif SUPER_EFFECTIVE[att_kudomon.type] == def_kudomon.type
       damage = att_kudomon.cp * SUPER_EFFECTIVE_MULTIPLIER
     else
-      damage = (att_kudomon.cp * RANDOM_MULTIPLIER).round
+      damage = att_kudomon.cp
     end
   end
 
@@ -74,6 +86,7 @@ class Battle
   end
 
   def damage_message(att_trainer, att_kudomon, def_trainer, def_kudomon, damage)
+    print `clear`
     print "#{att_trainer.name}'s #{att_kudomon.species}
     inflicts #{damage} damage on #{def_trainer.name}'s #{def_kudomon.species}
     (#{def_kudomon.hp} HP remaining) \n \n"

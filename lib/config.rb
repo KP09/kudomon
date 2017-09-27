@@ -33,9 +33,6 @@ COMPUTER_NAMES = %w[
   Lyra
 ].freeze
 
-# Set the random multiplier for regular damage infliction
-RANDOM_MULTIPLIER = rand(0.5..1)
-
 # Set what types are Super Effective against other types
 SUPER_EFFECTIVE = {
   water: :fire,
