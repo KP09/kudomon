@@ -11,11 +11,7 @@ describe Position do
     let(:missing_coordinate) { Position.new({x: x_coordinate}) }
     let(:negative_position) { Position.new({x: x_coordinate_neg, y: y_coordinate}) }
 
-    it "exists as a class" do
-      expect(valid_position.class).to eq Position
-    end
-
-    it "is able to store a position" do
+    it "stores coordinates" do
       expect(valid_position.coordinates[:x]).to eq x_coordinate
       expect(valid_position.coordinates[:y]).to eq y_coordinate
     end

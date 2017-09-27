@@ -8,10 +8,6 @@ describe Trainer do
     let(:valid_trainer) { Trainer.new("Kees", {x: x_coordinate, y: y_coordinate}) }
     let(:invalid_trainer) { Trainer.new({x: x_coordinate, y: y_coordinate}) }
 
-    it "exists as a class" do
-      expect(valid_trainer.class).to eq Trainer
-    end
-
     it "stores a position" do
       expect(valid_trainer.coordinates[:x]).to eq x_coordinate
       expect(valid_trainer.coordinates[:y]).to eq y_coordinate
