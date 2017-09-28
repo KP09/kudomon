@@ -10,12 +10,12 @@ NEARBY = 10
 # Set the Kudomon for the game
 # make sure the species are capitalized
 KUDOMON = {
-  'Sourbulb' => {type: :grass, hp: 100, cp: 20},
-  'Mancharred' => {type: :fire, hp: 110, cp: 12},
-  'Chikapu' => {type: :electric, hp: 70, cp: 13},
-  'Artikudo' => {type: :rock, hp: 90, cp: 15},
-  'Charchomp' => {type: :psychic, hp: 80, cp: 10},
-  'Kudoise' => {type: :water, hp: 120, cp: 30}
+  'Sourbulb' => { type: :grass, hp: 100, cp: 20 },
+  'Mancharred' => { type: :fire, hp: 110, cp: 12 },
+  'Chikapu' => { type: :electric, hp: 70, cp: 13 },
+  'Artikudo' => { type: :rock, hp: 90, cp: 15 },
+  'Charchomp' => { type: :psychic, hp: 80, cp: 10 },
+  'Kudoise' => { type: :water, hp: 120, cp: 30 }
 }.freeze
 
 # Set the number of and possible names of computer Trainers
@@ -40,7 +40,7 @@ SUPER_EFFECTIVE = {
   grass: :rock,
   rock: :electric,
   electric: :water
-}
+}.freeze
 
 # Set the impact of super effectiveness on damage infliction
 SUPER_EFFECTIVE_MULTIPLIER = 2

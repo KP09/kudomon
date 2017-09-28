@@ -1,3 +1,4 @@
+# This class creates Kudomon
 class Kudomon < Position
   attr_reader :species
   attr_reader :type
@@ -9,7 +10,7 @@ class Kudomon < Position
 
   # Returns all Kudomon instances that are free
   def self.free
-    @@instance_collector.reject { |kudomon| kudomon.coordinates == nil }
+    @@instance_collector.reject { |kudomon| kudomon.coordinates.nil? }
   end
 
   def initialize(species, position)

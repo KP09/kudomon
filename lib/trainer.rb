@@ -1,3 +1,4 @@
+# This class creates Trainers
 class Trainer < Position
   attr_reader :name
   attr_accessor :collection
@@ -16,7 +17,7 @@ class Trainer < Position
   end
 
   def display_position
-    puts "Your current position:"
+    puts 'Your current position:'
     puts "#{coordinates[:y]} forward/back"
     puts "#{coordinates[:x]} left/right"
   end
@@ -24,24 +25,24 @@ class Trainer < Position
   def desired_position_change
     print `clear`
     display_position
-    puts "\n"
+    puts '\n'
     shift = {}
-    puts "How far forward or back do you want to move? (Fwd: + / Back: -)"
+    puts 'How far forward or back do you want to move? (Fwd: + / Back: -)'
     shift[:y] = gets.chomp.to_i
-    puts "How far left or right do you want to move? (Right: + / Left: -)"
+    puts 'How far left or right do you want to move? (Right: + / Left: -)'
     shift[:x] = gets.chomp.to_i
     shift
   end
 
   # Returns true if a trainer has one or more kudomon with positive HP
-  def has_live_kudomon?
+  def live_kudomon?
     return true if collection.any? { |kudomon| kudomon.hp > 0 }
   end
 
   # Shows all of a Trainer's Kudomon
   def show_squad
     if collection.any?
-      message("Your Kudomon Squad:")
+      message('Your Kudomon Squad:')
       collection.each do |k|
         puts "- #{k.species.upcase} (#{k.type}) HP: #{k.hp} // CP: #{k.cp}"
       end
@@ -61,7 +62,7 @@ class Trainer < Position
   def challengeable_trainers
     other_trainers = Trainer.all.reject { |trainer| trainer == self }
     other_trainers.select do |trainer|
-      trainer.nearby?(coordinates) && trainer.has_live_kudomon?
+      trainer.nearby?(coordinates) && trainer.live_kudomon?
     end
   end
 
@@ -73,13 +74,13 @@ class Trainer < Position
 
   # Returns true if a trainer already has the species, false if not
   def already_has?(species)
-    species_collection = self.collection.map { |kudomon| kudomon.species }
+    species_collection = collection.map(&:species)
     species_collection.include?(species.capitalize)
   end
 
   # Catches a targeted species if that species is nearby
   def catch(target_species)
-    nearby_species = catchable_kudomon.map { |kudomon| kudomon.species }
+    nearby_species = catchable_kudomon.map(&:species)
 
     # If the target species is nearby, create a new Kudomon of that species
     # and add it to the Trainer's collection
@@ -88,7 +89,7 @@ class Trainer < Position
       @collection << catch
       message("You've succesfully caught #{target_species.upcase}")
     else
-      message("Sorry, thats not a valid choice")
+      message('Sorry, thats not a valid choice')
     end
   end
 

@@ -1,9 +1,10 @@
+# This class handles a fake credit check for the player
 class CreditCheck
   def self.run
     print `clear`
     puts credit_kudos_ascii
-    puts "Performing Credit Kudos credit check"
-    puts "Analyzing income"
+    puts 'Performing Credit Kudos credit check'
+    puts 'Analyzing income'
     loading
     puts "\n Analyzing expenses"
     loading
@@ -11,8 +12,6 @@ class CreditCheck
     puts credit_kudos_ascii
     puts random_credit_message
   end
-
-  private
 
   def self.credit_kudos_ascii
     "   ____ ____  _____ ____ ___ _____   _  ___   _ ____   ___  ____
@@ -32,9 +31,9 @@ class CreditCheck
   def self.random_credit_message
     random_credit_score = rand(2)
     case random_credit_score
-      when 0 then "Eeeeshk! You probably shouldn't be taking a loan out right now"
-      when 1 then "Good stuff! Looks like you can afford a loan no problem"
-      when 2 then "Wowzer! You can splash the cash, you don't even need a loan!"
+    when 0 then "Eeeeshk! You probably shouldn't be taking a loan out right now"
+    when 1 then 'Good stuff! Looks like you can afford a loan no problem'
+    when 2 then "Wowzer! You can splash the cash, you don't even need a loan!"
     end
   end
 end

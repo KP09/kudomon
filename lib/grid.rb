@@ -1,3 +1,4 @@
+# This class is the grid on which KUDOMON go is played
 class Grid
   attr_reader :trainer
 
@@ -31,7 +32,7 @@ class Grid
   private
 
   def random_position
-    {x: rand(GRID_SIZE), y: rand(GRID_SIZE)}
+    { x: rand(GRID_SIZE), y: rand(GRID_SIZE) }
   end
 
   # Spawns the number of Kudomon as specified in config.rb
