@@ -15,7 +15,7 @@ describe Battle do
   end
 
   describe "#run" do
-    it "returns the right winning pair" do
+    it "returns the correct winning pair" do
       # Add the losing_kudomon to the losing_trainer's collection
       losing_trainer.collection << losing_kudomon
 
