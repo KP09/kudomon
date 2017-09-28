@@ -12,7 +12,6 @@ describe Battle do
 
       expect(battle.defender_kudomon).to eq(losing_kudomon)
     end
-
   end
 
   describe "#run" do

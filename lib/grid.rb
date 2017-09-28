@@ -2,7 +2,7 @@ class Grid
   attr_reader :trainer
 
   # Initializes a trainer and spawns Kudomon
-  def initialize(trainer_name)
+  def initialize(trainer_name = "Player")
     @trainer = Trainer.new(trainer_name.capitalize, random_position)
     spawn_kudomon
     spawn_trainers

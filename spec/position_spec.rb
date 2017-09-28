@@ -40,7 +40,6 @@ describe Position do
   describe "#nearby" do
     let(:nearby) { NEARBY/2 }
     let(:too_far) { NEARBY + 1 }
-
     let(:nearby_coordinates) { {x: x_coordinate + nearby, y: y_coordinate + nearby} }
     let(:too_far_coordinates) { {x: x_coordinate + too_far, y: y_coordinate + too_far} }
 
