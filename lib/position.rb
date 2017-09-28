@@ -4,6 +4,7 @@ class Position
 
   def initialize(coordinates)
     validate_position(coordinates)
+    @nearby = NEARBY
     @coordinates = coordinates
   end
 
@@ -13,7 +14,7 @@ class Position
     x_delta = self.coordinates[:x] - coordinates[:x]
     y_delta = self.coordinates[:y] - coordinates[:y]
     distance = Math.sqrt((x_delta**2) + (y_delta**2))
-    distance <= NEARBY
+    distance <= @nearby
   end
 
   private

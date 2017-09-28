@@ -4,6 +4,10 @@ class Grid
 
   # Initializes a trainer and spawns Kudomon
   def initialize(player_name)
+    @grid_size = GRID_SIZE
+    @number_of_kudomon = NUMBER_OF_KUDOMON
+    @kudomon = KUDOMON
+    @computer_names = COMPUTER_NAMES
     @trainer = Trainer.new(player_name.capitalize, random_position)
     spawn_kudomon
     spawn_trainers
@@ -11,7 +15,7 @@ class Grid
 
   def display_grid_size
     puts "\n" + "*" * 20
-    puts "The grid is #{GRID_SIZE} x #{GRID_SIZE}"
+    puts "The grid is #{@grid_size} x #{@grid_size}"
   end
 
   # Validates desired trainer movements
@@ -19,8 +23,8 @@ class Grid
     proposed_y_position = coordinates[:y] + desired_shift[:y]
     proposed_x_position = coordinates[:x] + desired_shift[:x]
 
-    if proposed_y_position > GRID_SIZE \
-        || proposed_x_position > GRID_SIZE \
+    if proposed_y_position > @grid_size \
+        || proposed_x_position > @grid_size \
         || proposed_y_position < 0 \
         || proposed_x_position < 0
       return false
@@ -32,23 +36,23 @@ class Grid
   private
 
   def random_position
-    { x: rand(GRID_SIZE), y: rand(GRID_SIZE) }
+    { x: rand(@grid_size), y: rand(@grid_size) }
   end
 
   # Spawns the number of Kudomon as specified in config.rb
   def spawn_kudomon
-    NUMBER_OF_KUDOMON.times do
-      Kudomon.new(KUDOMON.keys.sample, random_position)
+    @number_of_kudomon.times do
+      Kudomon.new(@kudomon.keys.sample, random_position)
     end
   end
 
   # Spawns computer Trainers in random positions
   # Gives them all a random number of Kudomon
   def spawn_trainers
-    COMPUTER_NAMES.each do |name|
+    @computer_names.each do |name|
       new_trainer = Trainer.new(name, random_position)
-      rand(1..KUDOMON.length).times do
-        new_kudomon = Kudomon.new(KUDOMON.keys.sample, nil)
+      rand(1..@kudomon.length).times do
+        new_kudomon = Kudomon.new(@kudomon.keys.sample, nil)
         new_trainer.collection << new_kudomon
       end
     end

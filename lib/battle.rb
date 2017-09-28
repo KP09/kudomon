@@ -7,6 +7,10 @@ class Battle
   attr_reader :trainers
 
   def initialize(challenger, defender, chosen_kudomon)
+    @mega_effective = MEGA_EFFECTIVE
+    @mega_effective_multiplier = MEGA_EFFECTIVE_MULTIPLIER
+    @super_effective = SUPER_EFFECTIVE
+    @super_effective_multiplier = SUPER_EFFECTIVE_MULTIPLIER
     @challenger = challenger
     @defender = defender
     @challenger_kudomon = chosen_kudomon
@@ -59,7 +63,7 @@ class Battle
     puts "#{first_tr.name}'s #{first_kudo.species} (#{first_kudo.type})"
     puts '---------- VS ----------'
     puts "#{second_tr.name}'s #{second_kudo.species} (#{second_kudo.type})"
-    puts '\n'
+    puts "\n"
   end
 
   # Returns the challenger_kudomon if given the challenging Trainer
@@ -71,10 +75,10 @@ class Battle
   # Calculates the damage an attacker will inflict on a defender
   # See 'config.rb'
   def calculate_damage(att_kudomon, def_kudomon)
-    if att_kudomon.type == MEGA_EFFECTIVE && def_kudomon.type != MEGA_EFFECTIVE
-      att_kudomon.cp * MEGA_EFFECTIVE_MULTIPLIER
-    elsif SUPER_EFFECTIVE[att_kudomon.type] == def_kudomon.type
-      att_kudomon.cp * SUPER_EFFECTIVE_MULTIPLIER
+    if att_kudomon.type == @mega_effective && def_kudomon.type != @mega_effective
+      att_kudomon.cp * @mega_effective_multiplier
+    elsif @super_effective[att_kudomon.type] == def_kudomon.type
+      att_kudomon.cp * @super_effective_multiplier
     else
       att_kudomon.cp
     end

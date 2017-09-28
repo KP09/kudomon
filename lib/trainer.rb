@@ -25,7 +25,7 @@ class Trainer < Position
   def desired_position_change
     print `clear`
     display_position
-    puts '\n'
+    puts "\n"
     shift = {}
     puts 'How far forward or back do you want to move? (Fwd: + / Back: -)'
     shift[:y] = gets.chomp.to_i

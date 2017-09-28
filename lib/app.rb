@@ -86,7 +86,7 @@ class App
     puts 'M - Move around'
     puts 'R - Request credit check'
     puts 'Q - Quit the game'
-    puts '\n'
+    puts "\n"
     gets.chomp
   end
 
