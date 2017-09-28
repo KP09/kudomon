@@ -3,17 +3,19 @@ require_relative 'index'
 
 class App
   def initialize
-    @grid = Grid.new(ask("What's your name?"))
+    player_name = ask("What's your name?")
+    @grid = Grid.new(player_name)
     @trainer = @grid.trainer
     @running = true
   end
 
   def run
-    message("Hello #{@trainer.name} and Welcome to KUDOMON GO!")
+    print `clear`
+    puts "Hello #{@trainer.name} and Welcome to KUDOMON GO!"
     while @running
       # Display the grid size and Trainer's position
-      display_grid_size
-      display_trainer_position
+      @grid.display_grid_size
+      @trainer.display_position
 
       # Determine the catchable kudomon nearby the trainer
       catchable_kudomon = @trainer.catchable_kudomon
@@ -21,7 +23,7 @@ class App
       # Determine and display nearby challengeable Trainers
       challengeable_trainers = @trainer.challengeable_trainers
 
-      # Show nearby kudomon message and nearby tr
+      # Show nearby kudomon message and nearby trainers
       show_catchable_kudomon(catchable_kudomon)
       show_challengeable_trainers(challengeable_trainers)
 
@@ -35,12 +37,11 @@ class App
       action = get_trainer_action(catch_enabled, challenge_enabled)
       route(action, catch_enabled, challenge_enabled)
     end
-    message("Ciao for now #{@trainer.name}! Play again soon!")
+    print `clear`
+    puts "Ciao for now #{@trainer.name}! Play again soon!"
   end
 
   private
-
-  # Helpers
 
   def ask(question)
     print `clear`
@@ -48,29 +49,12 @@ class App
     gets.chomp
   end
 
-  def message(message)
-    print `clear`
-    puts message
-  end
-
-  def display_grid_size
-    puts "\n"
-    puts "*" * 20
-    puts "The grid is #{GRID_SIZE} x #{GRID_SIZE}"
-  end
-
-  def display_trainer_position
-    puts "Your current position:"
-    puts "#{@trainer.coordinates[:y]} forward/back "
-    puts "#{@trainer.coordinates[:x]} left/right"
-  end
-
   def show_catchable_kudomon(catchable_kudomon)
     puts "-" * 20
     if catchable_kudomon.any?
       puts "There are Kudomon nearby that you don't have yet!"
-      catchable_kudomon.each do |kudomon|
-        puts "- #{kudomon.species.upcase} (#{kudomon.type}) HP: #{kudomon.hp} // CP: #{kudomon.cp}"
+      catchable_kudomon.each do |k|
+        puts "- #{k.species.upcase} (#{k.type}) HP: #{k.hp} // CP: #{k.cp}"
       end
     elsif @trainer.collection.length == KUDOMON.length
       puts "Well done! You have caught all Kudomon species!"
@@ -109,121 +93,54 @@ class App
     case action.upcase
     when "C" then catch if catch_enabled
     when "F" then challenge if challenge_enabled
-    when "S" then show_squad
+    when "S" then @trainer.show_squad
     when "M" then move_trainer
-    when "R" then credit_check
+    when "R" then CreditCheck.run
     when "Q" then end_game
     end
   end
 
-  # Handles the catching of a Kudomon
   def catch
     puts "Type the species of the Kudomon you want to catch"
-    target_species = gets.chomp.capitalize
-
-    if @trainer.catch(target_species)
-      message("You've succesfully caught #{target_species.upcase}")
-    else
-      message("Sorry, thats not a valid choice")
-    end
+    @trainer.catch(gets.chomp.capitalize)
   end
 
-  # Handles the challenging of another Trainer
   def challenge
     # Find the Trainer to be challenged
     puts "Type the name of the Trainer you want to challenge"
     target_name = gets.chomp.capitalize
-    target_trainer = @trainer.challengeable_trainers.find { |trainer| trainer.name == target_name }
+    target_trainer = @trainer.challengeable_trainers.find do |trainer|
+      trainer.name == target_name
+    end
 
     # Find the Kudomon to be challenged with
-    show_squad
+    @trainer.show_squad
     puts "Type which Kudomon you want to challenge #{target_name} with"
     chosen_species = gets.chomp.capitalize
-    chosen_kudomon = @trainer.collection.find { |kudomon| kudomon.species == chosen_species }
+    chosen_kudomon = @trainer.collection.find do |kudomon|
+      kudomon.species == chosen_species
+    end
 
-    # Determine if the trainer is a valid choice and run a new Battle if so
     if target_trainer && chosen_kudomon
       battle = Battle.new(@trainer, target_trainer, chosen_kudomon)
       battle.run
     end
   end
 
-  # Handles the displaying of the player's Kudomon squad
-  def show_squad
-    squad = @trainer.collection
-    if squad.any?
-      message("Your Kudomon Squad:")
-      squad.each do |kudomon|
-        puts "- #{kudomon.species.upcase} (#{kudomon.type}) HP: #{kudomon.hp} // CP: #{kudomon.cp}"
-      end
-    else
-      message("You haven't caught any Kudomon yet")
-    end
-  end
-
-  # Handles moving the player around the Grid
   def move_trainer
-    shift = desired_position_change
-    if @grid.move_trainer(shift[:y], shift[:x])
-      message("Your position has been updated")
+    desired_shift = @trainer.desired_position_change
+    if @grid.movement_valid?(@trainer.coordinates, desired_shift)
+      @trainer.move(desired_shift)
+      print `clear`
+      puts "Your position has been updated"
     else
-      message("Sorry, that's beyond the grid")
+      print `clear`
+      puts "Sorry, that's beyond the grid"
     end
   end
 
-  def desired_position_change
-    print `clear`
-    display_trainer_position
-    puts "\n"
-    shift = {}
-    puts "How far forward or back do you want to move? (Fwd: + / Back: -)"
-    shift[:y] = gets.chomp.to_i
-    puts "How far left or right do you want to move? (Right: + / Left: -)"
-    shift[:x] = gets.chomp.to_i
-    shift
-  end
-
-  # Handles the ending of the game
   def end_game
     @running = false
-  end
-
-  # Handles fake-checking the player's creditworthiness
-  def credit_check
-    print `clear`
-    puts credit_kudos_asci
-    puts "Performing Credit Kudos credit check"
-    puts "Analyzing income"
-    loading
-    puts "\n Analyzing expenses"
-    loading
-    print `clear`
-    puts credit_kudos_asci
-    puts random_credit_message
-  end
-
-  def credit_kudos_asci
-    "   ____ ____  _____ ____ ___ _____   _  ___   _ ____   ___  ____
-  / ___|  _ \\| ____|  _ \\_ _|_   _| | |/ / | | |  _ \\ / _ \\/ ___|
- | |   | |_) |  _| | | | | |  | |   | ' /| | | | | | | | | \\___ \\
- | |___|  _ <| |___| |_| | |  | |   | . \\| |_| | |_| | |_| |___) |
-  \\____|_| \\_\\_____|____/___| |_|   |_|\\_\\\\___/|____/ \\___/|____/"
-  end
-
-  def loading
-    rand(3..9).times do
-      print '.'
-      sleep(0.5)
-    end
-  end
-
-  def random_credit_message
-    random_credit_score = rand(2)
-    case random_credit_score
-      when 0 then "Eeeeshk! You probably shouldn't be taking a loan out right now"
-      when 1 then "Good stuff! Looks like you can afford a loan no problem"
-      when 2 then "Wowzer! You can splash the cash, you don't even need a loan!"
-    end
   end
 end
 

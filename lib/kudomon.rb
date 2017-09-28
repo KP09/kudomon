@@ -7,6 +7,11 @@ class Kudomon < Position
 
   @@instance_collector = []
 
+  # Returns all Kudomon instances that are free
+  def self.free
+    @@instance_collector.reject { |kudomon| kudomon.coordinates == nil }
+  end
+
   def initialize(species, position)
     raise 'Undefined Kudomon' unless KUDOMON.include?(species.capitalize)
     super(position)
@@ -15,10 +20,5 @@ class Kudomon < Position
     @hp = KUDOMON[@species][:hp]
     @cp = KUDOMON[@species][:cp]
     @@instance_collector << self
-  end
-
-  # Returns all Kudomon instances that are free
-  def self.free
-    @@instance_collector.reject { |kudomon| kudomon.coordinates == nil }
   end
 end

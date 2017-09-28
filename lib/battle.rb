@@ -9,19 +9,17 @@ class Battle
     @challenger = challenger
     @defender = defender
     @challenger_kudomon = chosen_kudomon
-
-    # Randomly select one of the defender's kudomon
-    @defender_kudomon = defender.collection.sample
-
+    # Randomly pick one of the defender's Kudomon
+    @defender_kudomon = @defender.collection.sample
     # Shuffle to randomize who starts
-    @trainers = [challenger, defender].shuffle
+    @trainers = [@challenger, @defender].shuffle
   end
 
   def run
-    battle_start_message
+    battle_start_message(@trainers.first, @trainers.last)
 
     # Short pause for better user experience
-    sleep(3)
+    sleep(0.5)
 
     until (@challenger_kudomon.hp <= 0) || (@defender_kudomon.hp <= 0)
       # Set which Trainer is attacking/defending
@@ -50,17 +48,17 @@ class Battle
 
   private
 
-  def battle_start_message
+  def battle_start_message(first_trainer, second_trainer)
     # Works out the starting state of the game
-    first_trainer = @trainers.first
     first_kudomon = set_kudomon(first_trainer)
-    second_trainer = @trainers.last
     second_kudomon = set_kudomon(second_trainer)
+
     print `clear`
     puts "LET THE BATTLE BEGIN!"
     puts "#{first_trainer.name}'s #{first_kudomon.species} (#{first_kudomon.type})"
     puts "---------- VS ----------"
-    puts "#{second_trainer.name}'s #{second_kudomon.species} (#{second_kudomon.type}) \n \n"
+    puts "#{second_trainer.name}'s #{second_kudomon.species} (#{second_kudomon.type})"
+    puts "\n"
   end
 
   # Returns the challenger_kudomon if given the challenging Trainer
@@ -69,7 +67,7 @@ class Battle
     trainer == @challenger ? @challenger_kudomon : @defender_kudomon
   end
 
-  # Calculates the damage the specified attacker will inflict on the specified defender
+  # Calculates the damage an attacker will inflict on a defender
   # See 'config.rb'
   def calculate_damage(att_kudomon, def_kudomon)
     if att_kudomon.type == MEGA_EFFECTIVE && def_kudomon.type != MEGA_EFFECTIVE
@@ -82,24 +80,17 @@ class Battle
   end
 
   def inflict_damage(def_kudomon, damage)
-    def_kudomon.hp = def_kudomon.hp - damage
+    def_kudomon.hp -= damage
   end
 
   def damage_message(att_trainer, att_kudomon, def_trainer, def_kudomon, damage)
-    print `clear`
-    print "#{att_trainer.name}'s #{att_kudomon.species}
-    inflicts #{damage} damage on #{def_trainer.name}'s #{def_kudomon.species}
-    (#{def_kudomon.hp} HP remaining) \n \n"
+    puts "#{att_trainer.name}'s #{att_kudomon.species} inflicts #{damage} damage"
+    puts "#{def_trainer.name}'s #{def_kudomon.species} has #{def_kudomon.hp} HP remaining"
+    puts "\n"
   end
 
   def alternate_turn
     @trainers.reverse!
-  end
-
-  def battle_end_message(winning_pair)
-    print `clear`
-    puts "IT'S ALL OVER!"
-    puts "#{winning_pair[:trainer].name}'s #{winning_pair[:kudomon].species} wins"
   end
 
   def determine_winning_pair
@@ -108,5 +99,11 @@ class Battle
     else
       winning_pair = {trainer: @defender, kudomon: @defender_kudomon}
     end
+  end
+
+  def battle_end_message(winning_pair)
+    print `clear`
+    puts "IT'S ALL OVER!"
+    puts "#{winning_pair[:trainer].name}'s #{winning_pair[:kudomon].species} wins"
   end
 end
